@@ -1,0 +1,16 @@
+<!-- Published version, backed up 2026-09-24 -->
+<!-- Source: https://claude.ai/artifact/6CVgihGnknrV5RqBsqz8yr -->
+
+# Mateship
+
+Almost 40 years since I left Morocco. Between the day I walked out and 2023, I had no idea what was happening back home. None. Zero. You have to understand something: Australia isn't just far from Morocco — Australia is far from *everything*. It's the kid standing at the back of the class photo, technically present, mentally somewhere else.
+
+And Australians have a mentality to match. Overseas news just doesn't register the same way — not out of indifference, but because for most of this country's short history, "overseas" simply wasn't reachable. Empty, isolated, brutally hard to get to. The first Europeans here weren't explorers chasing a dream — they were convicts, shipped out by England to work the land and disappear. Unlike back home, where a title or a family name gets inherited for generations, these people inherited nothing but distance and hard labour. So they built something else instead: a way of surviving together. No unions striking weekly like you'd see elsewhere — instead, something quieter and, I've come to think, harder won.
+
+I had to learn this the slow way, not read it in a book. "Hi mate!" — you'll hear it fifty times a day here, and it took me years to stop hearing it as small talk and start hearing it as a *rule*. A mate is a friend, full stop, before anything else is established about you. Respect is assumed, not earned first. And smiling — genuinely, for no transactional reason — was not something I arrived knowing how to do on command. It doesn't cost anything, they say. It took me a while to believe that.
+
+The story behind it, once someone explained it to me: those convicts were desperate just to *see* people, across all that distance, and desperate to hold together against the power that shipped them out. So they made a habit of checking in on each other, of being decent by default. And they passed that down, generation after generation, until it became simply "how things are" — the kind of thing nobody here even notices they're doing.
+
+The second rule I had to absorb: work. Work here isn't a job, it's closer to a religion. "What do you do for living?" — the first question anyone asks you, and for years I heard it wrong. It's not about money, car, house. It's really asking: are you in the system? Are you pulling your weight? In 23 years, I can count on one hand the people I've met here who weren't working — and every one of them was dealing with something real: a mental health struggle, an addiction, some genuine reason work wasn't possible right then. Outside of that, everyone works. I know how that sounds. I promise you it's close enough to true that it might as well be. You cannot quietly coast in Australia. People learned that the hard way, a long time ago, and it never left. Every year the country brings in close to 300,000 skilled migrants just to fill the gaps. Work ethic isn't encouraged here, it's load-bearing. The worst thing that can happen to you isn't losing a job — it's being the person nobody wants around because you don't carry your share.
+
+That's what 23 years out here rewired in me.
