@@ -1,0 +1,565 @@
+<!DOCTYPE html>
+<html lang="de">
+<head>
+<meta charset="utf-8">
+<meta name="viewport" content="width=device-width, initial-scale=1">
+<title>Noch einmal bei null anfangen</title>
+<link rel="preconnect" href="https://fonts.googleapis.com">
+<link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
+<link href="https://fonts.googleapis.com/css2?family=Bricolage+Grotesque:opsz,wght@12..96,500;12..96,700&family=Source+Serif+4:ital,opsz,wght@0,8..60,400;0,8..60,600;1,8..60,400&display=swap" rel="stylesheet">
+<style>
+:root{
+  /* Layout: full-bleed photo opener, then the story runs down a single timeline rail; photos sit on the rail as stops. */
+  --bg:#f2f4f3;
+  --ink:#16262c;
+  --muted:#5b6a6f;
+  --rail:#c9b48a;
+  --accent:#0d6672;
+  --card:#ffffff;
+  --display:"Bricolage Grotesque", "Helvetica Neue", Arial, sans-serif;
+  --body:"Source Serif 4", Georgia, "Times New Roman", serif;
+  color-scheme:light;
+}
+@media (prefers-color-scheme: dark){
+  :root:not([data-theme="light"]){
+    --bg:#11191c; --ink:#e7ecea; --muted:#9aa8ab; --rail:#8a7752; --accent:#5fc0cc; --card:#1a2428; color-scheme:dark;
+  }
+}
+:root[data-theme="dark"]{
+  --bg:#11191c; --ink:#e7ecea; --muted:#9aa8ab; --rail:#8a7752; --accent:#5fc0cc; --card:#1a2428; color-scheme:dark;
+}
+.langs{position:absolute;top:12px;right:16px;display:flex;gap:6px;font-family:var(--display);font-size:.85rem;z-index:2}
+.langs a{color:#fff;text-decoration:none;padding:4px 10px;border:1px solid rgba(255,255,255,.6);border-radius:999px;background:rgba(10,20,24,.35)}
+.langs a[aria-current]{background:#fff;color:#16262c}
+*{box-sizing:border-box}
+html,body{margin:0}
+body{background:var(--bg);color:var(--ink);font-family:var(--body);font-size:1.1rem;line-height:1.65}
+img{max-width:100%;display:block}
+
+.hero{position:relative;color:#fff;background:#16262c}
+.hero img{width:100%;height:clamp(320px,58vw,620px);object-fit:cover;object-position:center 35%}
+.hero .shade{position:absolute;inset:0;background:linear-gradient(to top,rgba(10,20,24,.85) 0%,rgba(10,20,24,.25) 45%,rgba(10,20,24,0) 70%)}
+.hero .titles{position:absolute;left:0;right:0;bottom:0;padding:0 20px 28px;max-width:780px;margin:0 auto}
+.hero h1{font-family:var(--display);font-weight:700;font-size:clamp(2.6rem,9vw,5rem);line-height:1;margin:0 0 .4rem;text-wrap:balance}
+.hero p{margin:0;font-family:var(--display);font-weight:500;font-size:clamp(.95rem,2.6vw,1.15rem);opacity:.92;font-variant-numeric:tabular-nums}
+
+main{max-width:780px;margin:0 auto;padding:36px 20px 24px}
+.timeline{position:relative;display:grid;gap:40px;padding-left:34px}
+.timeline::before{content:"";position:absolute;left:9px;top:6px;bottom:6px;width:2px;background:var(--rail)}
+.stop{position:relative}
+.stop::before{content:"";position:absolute;left:-31px;top:.45rem;width:14px;height:14px;border-radius:50%;background:var(--bg);border:3px solid var(--accent)}
+.stop.photo::before{border-color:var(--rail);background:var(--rail)}
+.when{font-family:var(--display);font-weight:700;font-size:.82rem;letter-spacing:.08em;text-transform:uppercase;color:var(--accent);margin:0 0 .35rem}
+.stop p{margin:0 0 .9rem;max-width:65ch}
+.stop p:last-child{margin-bottom:0}
+blockquote{margin:.2rem 0 1rem;padding:0 0 0 14px;border-left:3px solid var(--rail);font-style:italic}
+
+figure{margin:0;background:var(--card);border-radius:6px;overflow:hidden;box-shadow:0 1px 3px rgba(0,0,0,.12)}
+figcaption{font-family:var(--display);font-size:.85rem;color:var(--muted);padding:8px 12px 10px;line-height:1.4}
+.pair{display:grid;grid-template-columns:1fr 1fr;gap:12px}
+.pair figure img{width:100%;aspect-ratio:3/4;object-fit:cover}
+.sign img{max-height:520px;width:100%;object-fit:cover;object-position:center 30%}
+.clip video{width:100%;display:block;aspect-ratio:848/480;background:#000}
+.tall img{width:100%;max-height:640px;object-fit:cover;object-position:center 40%}
+.wide img{width:100%;aspect-ratio:16/8;object-fit:cover}
+
+.chapter::before{width:20px;height:20px;left:-34px;top:.3rem;background:var(--accent);border-color:var(--accent)}
+.chapter h2{font-size:clamp(1.6rem,5vw,2.1rem);margin:0}
+.chapter .sub{font-family:var(--display);color:var(--muted);margin:.2rem 0 0;font-size:.95rem}
+.facts{background:var(--card);border-left:3px solid var(--accent);padding:12px 16px;border-radius:4px;font-size:1rem}
+.facts p.when{margin-bottom:.5rem}
+h2{font-family:var(--display);font-weight:700;font-size:1.5rem;margin:0 0 .6rem;text-wrap:balance}
+.ending p{font-size:1.15rem}
+.last-line{font-family:var(--display);font-weight:700;font-size:1.25rem;color:var(--accent)}
+.ending .last{font-family:var(--display);font-weight:700;font-size:1.5rem;color:var(--accent)}
+
+footer{max-width:780px;margin:0 auto;padding:24px 20px 40px;font-family:var(--display);font-size:.85rem;color:var(--muted);border-top:1px solid var(--rail)}
+@media (max-width:420px){.pair{grid-template-columns:1fr}.pair figure img{aspect-ratio:auto}}
+</style>
+</head>
+<body>
+
+<header class="hero">
+  <nav class="langs" aria-label="Language"><a href="../" hreflang="en">English</a><a href="../de/" hreflang="de" aria-current="page">Deutsch</a><a href="../fr/" hreflang="fr">Français</a></nav>
+  <img src="../img/bridge.jpg" alt="Die Gruppe lehnt am Geländer der Holzbrücke am Eli Creek und lächelt in die Kamera">
+  <div class="shade"></div>
+  <div class="titles">
+    <h1>Noch einmal bei null anfangen</h1>
+    <p>Australien · 2003 bis 2022 · von Freiburg bis zum Sand-Highway</p>
+  </div>
+</header>
+
+<main>
+<div class="timeline">
+
+  <section class="stop chapter">
+    <h2>Ankommen</h2>
+    <p class="sub">2003 · von Freiburg nach Australien</p>
+  </section>
+
+  <section class="stop">
+    <p class="when">3. September 2003, gegen 15 Uhr</p>
+    <p>Freiburger Hauptbahnhof. Umarmungen, Winken, eine Menge Freunde auf dem Bahnsteig.</p>
+    <p>Marokko war der erste Neuanfang bei null gewesen. Deutschland der zweite. Australien würde der dritte werden. Inzwischen, sollte man meinen, hätte es leicht sein müssen.</p>
+  </section>
+
+  <section class="stop chapter">
+    <h2>Sich einleben</h2>
+    <p class="sub">Die ersten Jahre</p>
+  </section>
+
+  <section class="stop">
+    <p class="when">Alles war bereit</p>
+    <p>Die Papiere waren erledigt, bevor das Flugzeug landete: Staatsbürgerschaft auf der einen Seite, Daueraufenthalt auf der anderen. Sobald man australischen Boden betrat, war alles für Behörden und Pflichten geregelt. Schule und Medicare kamen zuerst, der Rest war eine Frage der Zeit.</p>
+    <p>Das Leben war ganz normal, australischer Mittelstand. Es fehlte an nichts. Wenn man etwas brauchte, wurde es gekauft. Punkt. Für alles war gesorgt, bis hin zum Babytragetuch.</p>
+    <p>Das hier ist also keine Geschichte über Geld. Es ist eine Geschichte über den Kopf.</p>
+  </section>
+
+  <section class="stop">
+    <p class="when">Ein Haus voller Erinnerungen</p>
+    <p>Das Haus, das die Familie bei der Ankunft empfing, war ein Familienhaus voller Kindheitserinnerungen. Drei Jahre später gehörte es uns. Es ist bis heute dasselbe Haus.</p>
+    <p>Es war halb möbliert. Der Rest kam aus Deutschland, in einem halben Schiffscontainer, organisiert über einen früheren Arbeitgeber: die Geräte, der Hausrat und, am wichtigsten von allem, die Waschmaschine. Mit Zwillingen hatte sie nie einen freien Tag.</p>
+    <p>Es gab einen richtigen Büroschreibtisch, schwer, mit Holzgestell, und ein Zimmer dafür. Es gab genug Zimmer für alle, sogar eines für die Musik. Ein Haus voller Erinnerungen und Gefühle.</p>
+    <p>Nicht jeder Neuankömmling fängt so an. Später hörte ich Geschichten von Leuten, die in leere Häuser zogen, mit ein paar Stühlen als einzigem Mobiliar. Ein paar Jahre später bauten sie sich einen Pool.</p>
+  </section>
+
+  <section class="stop">
+    <p class="when">Die Sprache, die verloren ging</p>
+    <p>Jahre zuvor hatte ein junger Mann in einem fahrenden Bus in Casablanca Französisch in Echtzeit ins Deutsche übertragen. Jetzt stand derselbe Mann in einem australischen Wohnzimmer, nickte und lächelte, meistens an den falschen Stellen.</p>
+    <p>Zu Hause war die Frage immer dieselbe, auf Deutsch: <em>„Was haben sie gesagt?“</em></p>
+    <p>Es war dieselbe Frage, nur umgekehrt, die Jahre zuvor auf einer ersten Reise nach Marokko gestellt worden war, in einem Haus voller Familie, die Fragen auf Arabisch abfeuerte. Lustig war es damals auch nicht. Aber so lief es: Einer stützte den anderen, jedes Mal. Jemanden zu finden, der so denkt wie man selbst, war das nicht überhaupt der Grund gewesen, Marokko zu verlassen?</p>
+    <p>Mit 45, mit Kindern, ohne Arbeit und ohne Englisch, endete ein Vorstellungsgespräch mit: „Sie sind für uns überqualifiziert.“</p>
+  </section>
+
+  <section class="stop">
+    <p class="when">November, auf den Kopf gestellt</p>
+    <p>In Deutschland war der November der graue Monat gewesen: kalt, dunkel, alles stand still. Dann wurde er der Monat, in dem die Zwillinge geboren wurden. Und in Australien wurde der November zum Sommer.</p>
+    <p>Die Zwillinge waren 10 Monate alt, und sie waren das Erste und Letzte, woran man jeden Tag dachte. Ein großes Haus, eine ruhige Straße, herrliches Wetter. Die Kleinen liefen draußen ohne Windeln herum. Windeln gab es nur zum Schlafen. In Deutschland hatte man vor jedem Spaziergang mit dem Kinderwagen zuerst die Windel geprüft.</p>
+  </section>
+
+  <section class="stop">
+    <p class="when">Englisch lernen. Oder war es australisches Englisch? 😒🤔</p>
+    <p>Australisches Englisch ist eine Sprache, in der eine Verneinung ein Kompliment ist. „Not bad“ (nicht schlecht) kann heißen, dass es hervorragend war. Wenn man jemandem zustimmt, sagt man ihm, er liege „not wrong“ (nicht falsch). Der Komiker Carl Barron hat eine ganze „Not bad“-Nummer darüber.</p>
+    <p>Nicht billig. Nicht weit. Kein langsames Auto. Und die Leute, die Australien nie verlassen haben? Nicht wenige.</p>
+  </section>
+
+  <section class="stop">
+    <p class="when">Eine Insel, weit, weit, weit weg</p>
+    <p>Für alle, die aus Übersee ankommen: Australien ist anders als alles, was man kennt, wo man gelebt hat oder aufgewachsen ist. Es ist eine Insel, weit, weit, weit weg vom Rest der Welt. Die Einheimischen scherzen, wie weit sie hinter der Sonne liegen.</p>
+    <p>Vergiss, was du im Kopf mitgebracht hast, wie die Dinge sein sollten, und pass dich an, wie sie sind. Für Vergleichen oder Jammern ist keine Zeit. Was du siehst, ist, was du bekommst. Leiste deinen Teil und mach mit. Alles, was du brauchst, um zu arbeiten, ein Geschäft zu gründen oder deine Fähigkeiten zu nutzen, ist schon da.</p>
+  </section>
+
+  <section class="stop facts">
+    <p class="when">Drei Dinge, die man braucht</p>
+    <p><strong>Erstens, ein Auto.</strong> Öffentliche Verkehrsmittel gibt es nicht immer um die Ecke, und die nächste Bushaltestelle kann eine halbe Stunde zu Fuß entfernt sein. 2018 hatten nur 12 % der Haushalte in Brisbane eine Haltestelle im Umkreis von 400 m mit mindestens einer Verbindung alle 30 Minuten. 2024 fehlte zwei Dritteln der Einwohner Brisbanes noch immer ein häufiger Takt im Umkreis von 800 m. Das Auto ist also das meistgenutzte öffentliche Verkehrsmittel Australiens. Im Berufsverkehr sieht man selten mehr als eine Person im Auto. Nach den ersten drei Monaten Arbeit ist ein Auto das Erste, was sich jeder kaufen will.</p>
+    <p>Von dort, wo wir wohnen, braucht die Fahrt in die Stadt etwas Geduld. Im morgendlichen Berufsverkehr in Brisbane dauern 10 km im Schnitt etwa 24 Minuten.</p>
+    <p><strong>Zweitens, ein Haus.</strong> Australier wohnen in die Breite, nicht in die Höhe. Außerhalb des CBD (Central Business District, der Innenstadt) sind die Vororte selten höher als ein Stockwerk. „Jesus of Suburbia“, wie Green Day sang. Mieten ist nicht billig. (Da ist sie, die Falle: „nicht billig“ statt „teuer“. 🙃😆😂) Die mittlere Wochenmiete für ein Haus im Großraum Brisbane lag Anfang 2026 bei etwa 650 Dollar.</p>
+    <p><strong>Drittens, Platz. Viel davon.</strong> Der Großraum Brisbane ist flächenmäßig die größte der sechs Hauptstädte Australiens, mit 15.842 km². Das ist etwa zehnmal so groß wie der Großraum London, mit einem Bruchteil der Menschen.</p>
+  </section>
+
+  <section class="stop">
+    <p class="when">Ein Werktag in der Vorstadt</p>
+    <p>Einfamilienhäuser säumen eine grüne Straße: Rasen, Pools, die Mittelstandshäuser, die man aus amerikanischen Filmen kennt. Manche Neuankömmlinge nennen Australien den 51. Bundesstaat der USA. Vieles wirkt vertraut auf Besucher aus den USA und Kanada, und genau 💯 deshalb sind das heute die Gäste meiner Touren.</p>
+    <p>Um 9 Uhr sind die Kinder in der Schule und die Eltern bei der Arbeit. Bis halb drei sieht man ein paar Rentner, die den Hund ausführen oder ihre tägliche Runde drehen, und vielleicht 30 Autos fahren den ganzen Tag vorbei. Es gibt große Parks mit Spielplätzen, Sandkästen und Rutschen 🛝 und einen langen, schönen Weg mit dem Kinderwagen am Bach entlang, meist ohne einen anderen Menschen. Ein Paradies für Kinder.</p>
+    <p>Und irgendwann fühlt man sich allein. Auch das gehört zum Ankommen.</p>
+  </section>
+
+  <section class="stop">
+    <p class="when">Pflicht, nicht die Uhr</p>
+    <p>Dann merkt man, wie wichtig hier die Zeit ist. Eigentlich ist es nicht die Uhr. Respekt vor der Zeit hatte Deutschland schon gelehrt. Hier ist es ein Pflichtgefühl: Jeder leistet seinen Teil für die Gemeinschaft.</p>
+    <p>Niemand sonst ist für dein Handeln verantwortlich, und Gesetz ist Gesetz. Australien hat seine dunkleren Kapitel hinter sich gelassen, um ein gerechtes Land aufzubauen, mit denselben Rechten und Pflichten für alle. Alles liegt bereit, damit du es selbst nachprüfen kannst. Du musst es nur selbst tun, wenn du ENGLISCH sprichst.</p>
+  </section>
+
+  <section class="stop">
+    <p class="when">Die erste Arbeit</p>
+    <p>Die erste Arbeit lag etwa eine Autostunde entfernt, im Betrieb des Bruders eines Freundes der Familie. Es war ein Familienbetrieb zu dritt: der Bruder, sein Partner und der Neuankömmling, der elektrische Teile montierte.</p>
+    <p>Das hieß, allein auf der falschen Straßenseite zu fahren, wie alle hier. Die Verkehrsregeln saßen schnell, und genauso schnell kamen lange Gespräche in der Werkstatt. Das Herauskommen aus dem Haus hatte begonnen.</p>
+  </section>
+
+  <section class="stop">
+    <p class="when">Zwei Wochen Respekt 🙏</p>
+    <p>Dann kam ein zweiwöchiger Intensivkurs für qualifizierte Neuankömmlinge: Rechte und Pflichten in Australien, australische Arbeitsstandards, die Gesetze und wie man sich in der Öffentlichkeit verhält. Denk dran, Australien ist einzigartig.</p>
+    <p>Wozu das alles? Weil zwei Wochen reichen, um die Grundlagen zu lernen, und die Grundlagen lassen sich auf ein Wort bringen: Respekt.</p>
+  </section>
+
+  <section class="stop facts">
+    <p class="when">Die Regeln, die niemand aufschreibt</p>
+    <p><strong>Mateship ist ein Überlebensinstinkt, keine Tugend.</strong> Wer aus Marokko kommt, wo Gastfreundschaft eine Aufführung ist (der Tee, das Drängen, die zur Schau gestellte Großzügigkeit), dem kann australische Freundlichkeit flach vorkommen. Kein Aufhebens, keine Show, nur stille Verlässlichkeit, und man macht dem Nächsten das Leben nicht schwerer. Es ist ein alter Reflex aus der Sträflingszeit: Wir sitzen alle im selben Boot gegen das System. Deshalb ist das Augenrollen über Autoritäten hier fast ein Ritual der Zusammengehörigkeit, während in Marokko die Hierarchie respektiert wird, zumindest in der Öffentlichkeit.</p>
+    <p><strong>Arbeit ist Bürgerpflicht, keine Identität.</strong> „Was machst du?“ ist keine Frage nach dem Status. Es geht darum, ob du etwas beiträgst. Zahl deinen Anteil und sei kein „Bludger“ (jemand, der auf Kosten des Systems lebt). Wochenenden sind heilig, und über Workaholics wird gelacht. Die Sünde ist nicht, zu wenig zu arbeiten; sie ist, gar nichts beizutragen.</p>
+    <p><strong>Englisch ist der Eintrittspreis, nicht die Auslöschung dessen, wer du bist.</strong> In Marokko ist es das Normalste der Welt, je nach Situation die Sprache zu wechseln. Hier geht es beim Englisch in der Öffentlichkeit und bei der Arbeit weniger um Identität als um dieselbe Mateship-Logik: eine gemeinsame Sprache, damit alle zusammen vorankommen.</p>
+    <p>Der rote Faden, der alle drei verbindet: Werde der Gruppe nicht zur Last. Sei freundlich, arbeite, sprich Englisch.</p>
+  </section>
+
+  <section class="stop">
+    <p class="when">Sechs Wochen in der Praxis</p>
+    <p>Danach kamen sechs Wochen Praxistraining: dieselben Regeln noch einmal, diesmal durch Tun gelernt. Die Gruppe bestand nur aus qualifizierten Neuzuwanderern: Lehrer, Ingenieure, Ärzte. Jeder wurde in das Fachgebiet geschickt, auf das seine ausländischen Abschlüsse verwiesen, das, was er als seinen Hauptberuf bestätigt hatte.</p>
+    <p>Der Neuankömmling aus Marokko kam in das Rechenzentrum einer Firma mit rund 600 Arbeitsplätzen. „Day-to-day work“ nannten sie es im Netzwerk-Jargon. Man musste sich mit Computern und Computersystemen auskennen, mit Hard- und Software, und wissen, wie man sich im selben LAN aus der Ferne verbindet und kommuniziert. Und das alles auf Englisch, der einen Sprache, die er nicht verstand. Ohne Englisch war diese Arbeit nicht zu machen.</p>
+    <p>Aber die wichtigste Fähigkeit stand auf keiner Liste. Es war das Reden. Mach den Mund auf. Sag etwas. Erklär etwas.</p>
+  </section>
+
+  <section class="stop">
+    <p class="when">Déjà-vu</p>
+    <p>Kommt einem bekannt vor? Casablanca, 1977. Ein Zwanzigjähriger in einem Touristenbus im Morgengrauen, ohne Ausbildung, ohne echten Wortschatz, der die Worte eines französischen Reiseleiters spontan ins Deutsche überträgt, halb Französisch, halb einfaches Deutsch, und sich alles im Gehen zusammenreimt. „Meine Frauen und Herren.“</p>
+    <p>Damals redete er ohne die Worte. Jetzt hatte er die Worte im Kopf, nur nicht auf Englisch.</p>
+    <p class="last-line">Er konnte nicht reden. Er fiel. Er stand wieder auf und fing bei null an. Wieder einmal.</p>
+  </section>
+
+  <section class="stop">
+    <p class="when">Die Zwei-Jahres-Regel</p>
+    <p>Jemand, der ebenfalls aus Übersee kam, hat es einmal so gesagt: Viele Neuankömmlinge machen am Anfang zwei harte Jahre durch. Dann verlassen sie Australien, kommen ein paar Monate später zurück und gehen nie wieder weg.</p>
+    <p>Das stimmt wirklich. Die ersten zwei Jahre fühlten sich genau so an. Dann kamen das Reden, das Rausgehen, Menschen kennenlernen, arbeiten, und über Nacht änderte sich alles.</p>
+    <p>Im Rückblick waren diese zwei Jahre nötig: um die Regeln, die Mentalität, die neue Gesellschaft und die Sprache zu verstehen und den Mut zu finden, mit dem eigenen Auto zu fahren, ohne sich im Busch zu verirren.</p>
+  </section>
+
+  <section class="stop">
+    <p class="when">Schlangen, Spinnen und andere Nachbarn</p>
+    <p>Eines der wichtigsten Dinge, die dieses Land lehrt, ist die Liebe zur Natur.</p>
+    <p>Die Ankunft hier hatte einen bitteren Beigeschmack: die Angst vor Australiens Tierwelt. Die Geschichten über Schlangen und Spinnen waren lächerlich, und sie stammten von Leuten, die nie einen Fuß nach Australien gesetzt hatten.</p>
+    <p>Diesen Leuten antworte ich heute ganz einfach: Wir lieben unsere Schlangen und Spinnen. Es sind wunderschöne Geschöpfe. Man muss nur etwas über sie lernen.</p>
+  </section>
+
+  <section class="stop" id="beech">
+    <p class="when">Türen öffnen sich</p>
+    <p>Sobald man sich seiner Umgebung öffnet, gehen Türen auf. Man lernt, wie viele Bäume es gibt, und Formen, die man nie zuvor gesehen hat, außer vielleicht in einem Dschungelfilm.</p>
+    <p>Und dann steht man eines Tages vor Bäumen, die älter sind als alles, was man sich vorstellen kann. Hier stehe ich vor zwei Gästen und erkläre, wie die Antarktische Buche funktioniert: ihr frühes Leben in Gondwana und wo ihre Familie heute noch auf der Welt wächst. Diese Bäume sind etwa 3.000 Jahre alt.</p>
+  </section>
+
+  <section class="stop photo">
+    <figure class="tall">
+      <img src="../img/beech.jpg" alt="Bemooste Stämme einer Antarktischen Buche, die gemeinsam aus einem Fuß im nebligen Regenwald aufsteigen">
+      <figcaption>Antarktische Buche, Best of All Lookout, Springbrook. All diese bemoosten Stämme gehören zu einem einzigen Baum.</figcaption>
+    </figure>
+  </section>
+
+  <section class="stop facts">
+    <p class="when">Die Antarktische Buche, kurz gefasst</p>
+    <p><strong>Wo sie wächst.</strong> <em>Nothofagus moorei</em> wächst nur im kühl-gemäßigten Regenwald der Hochlagen Ostaustraliens, zwischen 500 und 1.550 Metern, von Barrington Tops in New South Wales nordwärts bis zu den Plateaus von Lamington und Springbrook in Queensland. Fast der gesamte Bestand an Antarktischen Buchen in Australien liegt im Welterbegebiet Gondwana Rainforests of Australia, und Lamington ist sein nördlichster Außenposten.</p>
+    <p><strong>Wie sie funktioniert.</strong> Sie wächst durch Stockausschlag. Neue Triebe sprießen ringförmig um den Fuß des alten Stammes und wachsen zu Klonen des Mutterbaums heran, sodass ein Kreis von Stämmen in Wahrheit ein einziger Baum ist. Wenn ein alter Stamm fällt, leben die Wurzeln weiter. Der Stamm vor dir mag jung sein; der Baum selbst steht hier seit Tausenden von Jahren.</p>
+    <p><strong>Woher sie kommt.</strong> Ihre Familie, die Südbuchen, zählt 43 Arten im südlichen Südamerika, in Australien, Neuseeland, Neuguinea und Neukaledonien, alles Bruchstücke des alten Superkontinents Gondwana. Fossilien zeigen, dass sie einst auch in der Antarktis wuchsen, vor dem Eis. Botaniker sagen, die Antarktische Buche unterscheide sich kaum von den Blütenpflanzen vor 100 Millionen Jahren.</p>
+    <p><strong>Ihre Schwäche.</strong> Sie braucht feuchtes, feuerfreies Land und erholt sich nur langsam von Bränden.</p>
+  </section>
+
+  <section class="stop chapter">
+    <h2>Erste Touren</h2>
+    <p class="sub">Großraum Brisbane</p>
+  </section>
+
+  <section class="stop">
+    <p class="when">Eine Handvoll Paare</p>
+    <p>Meine allererste Tour führte zum Mary Cairncross Scenic Reserve. Ein paar weitere folgten im Großraum Brisbane, nicht mehr als fünf. Meist deutsche Paare, manchmal französische.</p>
+    <p>Da war ich also, ein Marokkaner am anderen Ende der Welt, und verdiente mein Geld auf Deutsch und Französisch. Genau wie damals in Casablanca, vor all den Jahren. Manche Dinge folgen einem, wohin man auch geht.</p>
+  </section>
+
+  <section class="stop chapter">
+    <h2>Die Schweizer Schwestern</h2>
+    <p class="sub">Vor Covid · meine erste echte Lehrtour</p>
+  </section>
+
+  <section class="stop">
+    <p class="when">T fährt, ich rede</p>
+    <p>Dann nahm mich T mit zwei älteren Schweizer Schwestern mit, um mir zu zeigen, was solche Touren wirklich bedeuten.</p>
+    <p>Die Arbeitsteilung war einfach. T fuhr. Ich redete. Ich hielt die Schwestern auf dem Laufenden, Kilometer um Kilometer.</p>
+    <p>Was ich noch kaum kannte, war Australiens Kultur von Zeit und Raum. In Europa bringen einen ein paar Stunden Fahrt in ein anderes Land. Hier bringen sie einen in den nächsten Ort.</p>
+  </section>
+
+  <section class="stop">
+    <p class="when">Brisbane · Noosa · Rainbow Beach</p>
+    <p>Von Brisbane nordwärts nach Noosa und zum Steg, dann weiter nach Rainbow Beach.</p>
+    <p>Der Ort ist nach seinen Sandklippen benannt, und sie verdienen den Namen: Gelb, Braun, Rot, Weiß, Schicht um Schicht. Eisenhaltige Mineralien färben sie, und Wind und Regen malen sie immer wieder neu, sodass sie nie zweimal gleich aussehen. Die Kabi Kabi erzählen es schöner: Yiningie, ein Regenbogengeist, stürzte sich in die Klippen und ließ seine Farben dort zurück.</p>
+  </section>
+
+  <section class="stop">
+    <p class="when">Fraser Island · Kingfisher Bay</p>
+    <p>Am Strand entlang zur Fähre und hinüber auf die Insel, die damals noch Fraser hieß. Weiche Sandpisten. Ein Picknick am Lake McKenzie. Das rostige Wrack der Maheno am Strand. Dingo-Schilder. Und nachts das Kingfisher Bay Resort.</p>
+    <p>Die Tour war ein Erfolg. T war der Lehrer, ich der Schüler, und der Schüler hat bestanden.</p>
+  </section>
+
+  <section class="stop chapter">
+    <h2>Das schottische Paar</h2>
+    <p class="sub">Etwa einen Monat später</p>
+  </section>
+
+  <section class="stop">
+    <p class="when">Der Schüler übernimmt das Steuer</p>
+    <p>Einen Monat später war der Schüler der Fahrer.</p>
+    <p>Meine Fahrgäste: ein junger Schotte, Chef bei einer Fluggesellschaft, und seine Frau, die extra aus Schottland gekommen war, um ihn zu besuchen. Ein Mann, der sich mit dem Fliegen auskennt, und jetzt vertraute er mir am Boden.</p>
+    <p>Und los ging es nach Fraser Island, im Geländewagen. Den Sand-Highway hinunter. Harte Sanddünen hinauf.</p>
+  </section>
+
+  <section class="stop photo">
+    <figure class="clip">
+      <video src="../img/sand-highway.mp4" poster="../img/sand-highway.jpg" autoplay muted loop playsinline controls preload="metadata" aria-label="Drohnenaufnahme von Geländewagen auf dem Strand-Highway zwischen Brandung und Busch"></video>
+      <figcaption>Der 75 Mile Beach aus der Drohne. Auf der einen Seite das Meer, auf der anderen der Busch, und dazwischen der Highway.</figcaption>
+    </figure>
+  </section>
+
+  <section class="stop facts">
+    <p class="when">Regeln des Sand-Highways</p>
+    <p>Ja, der Strand ist eine echte Fernstraße. Der 75 Mile Beach an der Ostseite der Insel ist offiziell als Straße ausgewiesen, und es gelten die Verkehrsregeln von Queensland: 80 km/h am Strand, 30 km/h auf den Pisten im Inland und eine Zufahrtsgenehmigung für jedes Fahrzeug. Lass Luft aus den Reifen, auf etwa 18 bis 20 psi, sonst behält dich der Sand. Fahr nur zwei Stunden vor bis zwei Stunden nach Niedrigwasser, sonst redet der Ozean ein Wörtchen mit.</p>
+    <p>Und ja, er ist auch eine Landebahn. Kleine Flugzeuge starten und landen darauf. Flugzeuge haben Vorfahrt.</p>
+  </section>
+
+  <section class="stop">
+    <p class="when">November 2022 · die Türen gehen wieder auf</p>
+    <p>Fast zwei Jahre lang hielt Australien seine Grenzen geschlossen. Als es sie endlich öffnete, schien die ganze Welt auf einmal hereinzuströmen, als wäre dies der letzte sichere Ort auf einer von Covid-Angst zermürbten Landkarte. Die Reiseveranstalter waren überbucht. Jeder Bus, jedes Boot, jeder Reiseleiter war vergeben. Alles wurde zum Nadelöhr.</p>
+    <p>Dann rief T an. T, der Freund, der auf dieser ersten Fraser-Island-Tour mit den Schweizer Schwestern am Steuer gesessen hatte. Eine deutsche Gruppe kam nach Queensland, und er brauchte jemanden, der ihre Sprache sprach.</p>
+    <p>Der Auftrag klang einfach. Sie am Flughafen Proserpine abholen, ins Hotel bringen, einweisen, dann nach Süden: zehn Tage, 1.150 km im Reisebus, die ganze Küste hinunter bis Brisbane.</p>
+    <p>Einfach. Auf dem Papier.</p>
+  </section>
+
+  <section class="stop photo">
+    <figure class="sign">
+      <img src="../img/sign.jpg" alt="Rachid neben einer jungen Frau mit einem Schild: APTC, Taruk: Koala Kia Ora Combi Tour Group">
+      <figcaption>Das Gruppenschild: „APTC · Taruk: Koala Kia Ora Combi Tour Group“. Foto vom 14. November 2022, 18:17 Uhr.</figcaption>
+    </figure>
+  </section>
+
+  <section class="stop">
+    <p class="when">Flughafen Proserpine</p>
+    <p>Da stand ich also am Ausgang eines kleinen Flughafens in den Tropen, mit einem Schild mit einem Gruppennamen darauf, und wartete darauf, dass Deutschland durch die Tür kam.</p>
+    <p>Wir trafen uns, stiegen in den Bus, und ich legte auf Deutsch los. Diesmal kam „Meine Damen und Herren“ richtig heraus. Rund 45 Jahre nach „Meine Frauen und Herren“ in einem Touristenbus in Casablanca saß der erste Satz endlich.</p>
+    <p>Dann sah ich sie mir richtig an. Etwa vierzehn bis sechzehn Leute im Bus, den Busfahrer und mich mitgezählt, und jeder Gast sah mich an, als wäre ich seit Tagen der erste feste Boden. „Sie sprechen Deutsch?“ kam von jedem Sitz gleichzeitig.</p>
+    <p>Keine Zeit, mich vorzustellen. Und was hätte ich auch sagen sollen? Niemand hatte mir gesagt, dass ich auf mich allein gestellt sein würde. Und niemand hatte ihnen gesagt, mit wem sie es zu tun bekämen.</p>
+  </section>
+
+  <section class="stop">
+    <p class="when">Allein seit Melbourne</p>
+    <p>Die Geschichte kam in Bruchstücken heraus, alle redeten durcheinander. Ihre Reise war in Deutschland als eine große Australienreise in vier Etappen verkauft worden: Melbourne, Sydney, Ayers Rock, Queensland. Auf jeder Etappe sollte ein eigener Reiseleiter auf sie warten, jemand wie ich, der vor der Gruppe stand und erklärte, was als Nächstes kam.</p>
+    <p>In Melbourne, ganz am Anfang, tauchte dieser Jemand nie auf. Sie saßen in ihrem Hotel und wussten nicht, an wen sie sich wenden oder was sie tun sollten. Vom ersten Tag an lief die Reise auf Hoffnung.</p>
+    <p>Queensland war mein Teil. Und als sie endlich jemanden fanden, der ihre Sprache sprach, landete alles, was schiefgegangen war, auf einmal bei mir.</p>
+  </section>
+
+  <section class="stop">
+    <p class="when">Airlie Beach · 2 Nächte</p>
+    <p>Erster Halt: das Mantra Club Croc in Airlie Beach. Ich rief so schnell wie möglich eine Besprechung ein, draußen im Hotelrestaurant, bevor sich die Fragen noch höher stapeln konnten. Irgendwo zwischen der ersten und der zehnten Frage traf es mich: Jede Entscheidung von jetzt an liegt bei mir, und es gibt niemanden, den ich anrufen kann.</p>
+    <p>Ich stellte den nächsten Tag vor und las vom Programmblatt ab. Fähre zu den Whitsundays. Whitehaven Beach, Hill Inlet und die Aussicht, Baden, Essen auf einer anderen Insel, dann mit dem Boot zurück zur großen Fähre und schließlich ins Hotel.</p>
+  </section>
+
+  <section class="stop">
+    <p class="when">Die Schnorchel-Frage</p>
+    <p>Einer Dame klappte der Mund auf.</p>
+    <blockquote>„Schnorcheln? Gehen wir schnorcheln?“</blockquote>
+    <p>„Nicht, dass ich wüsste“, sagte ich. Ich sah noch einmal aufs Blatt. Kein Schnorcheln. Dem Blatt war das egal.</p>
+    <p>Sie fing an zu weinen. Sie habe ihr ganzes Leben in das Schnorcheln in den Whitsundays investiert, sagte sie. Zwei Tage lang weinte sie weiter und erzählte es mir immer wieder.</p>
+  </section>
+
+  <section class="stop photo">
+    <p class="when">Whitsundays · Whitehaven Beach</p>
+    <p>Am nächsten Morgen, Schnorcheln hin oder her, wartete die Fähre. Die Whitsundays sind ein Streufeld aus 74 Inseln, und die, wegen der alle kommen, ist Whitehaven: weißer Sand, so fein, dass er unter den Füßen quietscht.</p>
+    <figure class="wide">
+      <img src="../img/wh-ferry.jpg" alt="Ein weißer Katamaran von Cruise Whitsundays mit grünem Schildkrötenlogo im Jachthafen">
+      <figcaption>Cruise Whitsundays, wartend im Jachthafen.</figcaption>
+    </figure>
+  </section>
+
+  <section class="stop photo">
+    <figure class="wide">
+      <img src="../img/wh-seaplane.jpg" alt="Weißer Quarzsand am Whitehaven Beach, ein Wasserflugzeug im türkisen Wasser und ein gelbes Beiboot am Ufer">
+      <figcaption>Whitehaven Beach. Manche kommen mit dem Wasserflugzeug.</figcaption>
+    </figure>
+  </section>
+
+  <section class="stop photo">
+    <figure class="wide">
+      <img src="../img/wh-sign.jpg" alt="Der Reiseleiter lehnt am Whitehaven-Beach-Schild auf einem ausgebleichten Treibholzstamm">
+      <figcaption>Beweis der Anwesenheit.</figcaption>
+    </figure>
+  </section>
+
+  <section class="stop photo">
+    <figure class="wide">
+      <img src="../img/wh-tenders.jpg" alt="Schlauchboote bringen Menschen von einem großen Katamaran zum weißen Strand">
+      <figcaption>Beiboote bringen die Leute von den großen Schiffen zum Strand.</figcaption>
+    </figure>
+  </section>
+
+  <section class="stop photo">
+    <figure class="wide">
+      <img src="../img/wh-anchor.jpg" alt="Katamarane, eine Motorjacht und kleine Boote ankern vor einem weißen Strand, Menschen stehen im flachen Wasser">
+      <figcaption>Jeder will ein Stück von diesem Strand.</figcaption>
+    </figure>
+  </section>
+
+  <section class="stop photo">
+    <figure class="wide">
+      <img src="../img/wh-queue.jpg" alt="Eine lange Reihe von Besuchern geht über weißen Sand zu einem Beiboot am Wasser">
+      <figcaption>Zurück zum Boot, im Gänsemarsch.</figcaption>
+    </figure>
+  </section>
+
+  <section class="stop photo">
+    <p class="when">Cape Hillsborough</p>
+    <p>Dann begann die lange Straße nach Süden. Erster Halt: Cape Hillsborough, wo der Busch direkt bis zum Strand hinunterreicht.</p>
+    <figure class="wide">
+      <img src="../img/ch-bus.jpg" alt="Die Gruppe sitzt im Reisebus, mehrere lächeln und winken in die Kamera">
+      <figcaption>Wieder im Bus. Ein paar Lächeln, ein Winken, niemand weint.</figcaption>
+    </figure>
+  </section>
+
+  <section class="stop photo">
+    <figure class="wide">
+      <img src="../img/ch-coast.jpg" alt="Eine Araukarie rahmt eine geschwungene Sandbucht, Felsinseln und eine bewaldete Landzunge über türkisem Wasser">
+      <figcaption>Cape Hillsborough vom Aussichtspunkt.</figcaption>
+    </figure>
+  </section>
+
+  <section class="stop photo">
+    <figure class="wide">
+      <img src="../img/ch-lookout.jpg" alt="Zwei Männer mit Hüten am Geländer eines Aussichtspunkts über türkisen Buchten und grünen Inseln">
+      <figcaption>Auf der Aussichtsplattform. Inseln bis zum Horizont, und ein Daumen im Bild.</figcaption>
+    </figure>
+  </section>
+
+  <section class="stop photo">
+    <figure class="wide">
+      <img src="../img/ch-beach.jpg" alt="Ein Sandstrand voller winziger Sandkügelchen, dunkle Felstürme in der Brandung und eine Insel vor der Küste">
+      <figcaption>Der Strand darunter, Felstürme und eine Insel vor der Küste.</figcaption>
+    </figure>
+  </section>
+
+  <section class="stop photo">
+    <figure class="wide">
+      <img src="../img/ch-valley.jpg" alt="Ein weites grünes Tal mit Ackerland zwischen bewaldeten Bergketten unter blauem Himmel">
+      <figcaption>Blick ins Landesinnere.</figcaption>
+    </figure>
+  </section>
+
+  <section class="stop">
+    <p class="when">Rockhampton · 1 Nacht</p>
+    <p>Weiter nach Rockhampton für eine Nacht. Die Rinderhauptstadt Australiens, und das merkt man: Sogar die Statuen in der Stadt sind Bullen.</p>
+  </section>
+
+  <section class="stop">
+    <p class="when">Agnes Water · 1 Nacht</p>
+    <p>Agnes Water bescherte uns die besten Fish and Chips der ganzen Reise. Und die längste Nacht.</p>
+    <p>Fast Mitternacht, draußen noch warm. Die Gruppe saß im Resort um einen großen Tisch, Rotwein in den Gläsern und ein Thema auf dem Tisch: die Lücke zwischen dem, was ihr Reisebüro ihnen in Deutschland verkauft hatte, und dem, was sie tatsächlich bekamen.</p>
+    <p>Dann klopfte es an der Tür. Ob ich mit dem Reiseveranstalter sprechen könne? Er war aus Deutschland am Telefon, wo es mitten am Nachmittag war.</p>
+    <p>Was ich zu hören bekam: Er hatte von den Problemen gewusst, bevor sie passierten. Er bat mich nur, mein Bestes zu tun, damit sie zufrieden seien.</p>
+    <p>Irgendwie hörten in dieser Nacht das Reden und das Weinen auf. Vielleicht war es der Wein. Vielleicht war es einfach, gehört zu werden.</p>
+  </section>
+
+  <section class="stop">
+    <p class="when">Wechselgeld für 100 Dollar</p>
+    <p>Und dann war da noch das Geld. Etwas typisch Deutsches.</p>
+    <p>Einer von ihnen ging mit einem 100-Dollar-Schein in einen Zeitungsladen und bat um Wechselgeld, weil er alles in bar haben wollte, so wie zu Hause. Der Ladenbesitzer starrte ihn nur an. Wechseln, was? In Australien wurde seit Jahren mit Karte bezahlt, und seit Covid wollte niemand mehr Geld anfassen. Für einen Deutschen ist ein Land ohne Bargeld schwerer zu glauben als ein Känguru auf der Straße.</p>
+  </section>
+
+  <section class="stop photo">
+    <p class="when">K’gari · 2 Nächte</p>
+    <p>Zwei Nächte auf K’gari, der Insel, die ich zuerst als Fraser kannte. Wieder auf dem Sand-Highway, und diesmal kannte ich die Regeln. Diesmal fuhr der Bus.</p>
+    <figure class="wide">
+      <img src="../img/buses.jpg" alt="Gruppenmitglieder gehen über den Sand an einem blauen Bus von K&#x27;gari Explorer Tours und anderen Tourfahrzeugen vorbei">
+      <figcaption>Bus von K’gari Explorer Tours auf dem Sand.</figcaption>
+    </figure>
+  </section>
+
+  <section class="stop photo">
+    <figure class="wide">
+      <img src="../img/beach.jpg" alt="Eine lange Reihe von Geländewagen mit Sonnendächern auf weißem Sand an der Brandung">
+      <figcaption>Berufsverkehr auf dem 75 Mile Beach.</figcaption>
+    </figure>
+  </section>
+
+  <section class="stop photo">
+    <figure class="wide">
+      <img src="../img/bakery.jpg" alt="Weiße Backsteinbäckerei mit grünen Schildern: Eurong Bake House, Coffee and Cappuccino, Muffins and Donuts">
+      <figcaption>Eurong Bake House. Kaffee, Muffins und Donuts mitten auf einer Sandinsel.</figcaption>
+    </figure>
+  </section>
+
+  <section class="stop photo">
+    <div class="pair">
+      <figure>
+        <img src="../img/eli-sign.jpg" alt="Schild des Eli Creek zwischen Dünengras mit Dingo-Warnung und Campingverbot">
+        <figcaption>Eli Creek.</figcaption>
+      </figure>
+      <figure>
+        <img src="../img/bridge2.jpg" alt="Die Gruppe in einer Reihe auf der Brücke am Eli Creek, darunter Menschen mit Schwimmreifen im Wasser">
+        <figcaption>Die Gruppe auf der Brücke über den Eli Creek.</figcaption>
+      </figure>
+    </div>
+  </section>
+
+  <section class="stop photo">
+    <figure class="tall">
+        <img src="../img/tree-rachid.jpg" alt="Rachid mit ausgebreiteten Armen und Beinen vor demselben riesigen Baumstamm">
+        <figcaption>Ein riesiger Regenwaldbaum, mit einem Menschen als Größenvergleich.</figcaption>
+      </figure>
+  </section>
+
+  <section class="stop photo">
+    <p class="when">Brisbane · Lone Pine Koala Sanctuary</p>
+    <p>Letzter Halt: Brisbane. Nach zehn Tagen und 1.150 km auf der Straße war es Zeit, die Einheimischen kennenzulernen.</p>
+    <figure class="tall">
+        <img src="../img/kangaroos.jpg" alt="Eine Parktafel, die Östliches Graues Riesenkänguru, Rotes Riesenkänguru, Sumpfwallaby und Rotnackenwallaby vergleicht">
+        <figcaption>Östliches Graues Riesenkänguru, Rotes Riesenkänguru, Sumpfwallaby, Rotnackenwallaby.</figcaption>
+      </figure>
+  </section>
+
+  <section class="stop ending">
+    <p class="when">Zehn Tage, 1.150 km</p>
+    <p>Es gab ein paar rein deutsche Probleme, die ich nicht lösen konnte. Es begann im Chaos und endete in guter Gesellschaft. Mit einigen von ihnen bin ich bis heute in Kontakt.</p>
+    <p>Zehn Tage lang war ich wieder unter den Menschen und in der Sprache, die ich zurückgelassen hatte, als ich Deutschland verließ. Komisch, wie ein Reisebus in Queensland einen zurück nach Freiburg bringen kann.</p>
+    <p class="last">Glaubt mir, es ist gut gegangen.</p>
+  </section>
+
+  <section class="stop">
+    <p class="when">Danach</p>
+    <p>Zwei weitere Touren in diesen Teil der Welt folgten. Eine führte eine andere deutsche Gruppe zu den Whitsundays und zum Whitehaven Beach, und diesmal stand Schnorcheln auf dem Programm.</p>
+    <p>Eine andere Tour brachte die schwierigsten Charaktere überhaupt. Danach ging ich zum Chef und hörte auf. ✋</p>
+    <p>Keine Europäer mehr. Es sind nur Kopfschmerzen. Nur noch Englisch: Amerikaner, Kanadier. Entspannt, dankbar, glücklich.</p>
+    <p>Nie wieder. Außer es ist eine Person oder ein Paar.</p>
+  </section>
+
+  <section class="stop chapter">
+    <h2>Heute</h2>
+    <p class="sub">Kleine Touren, ein Gast oder zwei</p>
+  </section>
+
+  <section class="stop">
+    <p class="when">Für jeden etwas</p>
+    <p>Strände, Regenwald, die Stadt, die Inseln, der Zoo. Oder vielleicht bist du einfach wegen Essen und Trinken hier. Es gibt immer etwas zu bieten.</p>
+  </section>
+
+  <section class="stop photo">
+    <figure class="clip">
+      <video src="../img/straddie-drive.mp4" poster="../img/straddie-drive.jpg" autoplay muted loop playsinline controls preload="metadata" style="aspect-ratio:400/230" aria-label="Fahrt über einen breiten Strand bei Ebbe, durch die Windschutzscheibe gesehen"></video>
+      <figcaption>Strandfahrt auf North Stradbroke Island, vom Fahrersitz aus.</figcaption>
+    </figure>
+  </section>
+
+  <section class="stop photo">
+    <p class="when">Die Whitsundays, zum zweiten Mal</p>
+    <div class="pair">
+      <figure>
+        <img src="../img/snorkel-deck.jpg" alt="Gäste in Ganzkörper-Quallenanzügen lachen an Deck eines Bootes, Flossen zu ihren Füßen">
+        <figcaption>Diesmal stand Schnorcheln auf dem Programm. Quallenanzüge an.</figcaption>
+      </figure>
+      <figure>
+        <img src="../img/snorkel-boat.jpg" alt="Schnorchler in Quallenanzügen sitzen am Rand eines Schlauchboots über türkisem Wasser">
+        <figcaption>Endlich ins Wasser.</figcaption>
+      </figure>
+    </div>
+  </section>
+
+  <section class="stop photo">
+    <figure class="wide">
+      <img src="../img/coast.jpg" alt="Tiefblaues Wasser vor einer bewaldeten Inselküste mit einem Streifen weißem Sand und ankernden Booten">
+      <figcaption>Gewässer der Whitsundays.</figcaption>
+    </figure>
+  </section>
+
+  <section class="stop photo">
+    <figure class="wide">
+      <img src="../img/sails.jpg" alt="Zwei Jachten mit dunklen Segeln kreuzen in der Dämmerung vor Inselhügeln">
+      <figcaption>Segel im Sonnenuntergang.</figcaption>
+    </figure>
+</section>
+
+</div>
+</main>
+
+<footer>© 2026 Rachid. Alle Rechte vorbehalten.<br>Quellen der Fakten: SeaLink, Kingfisher Bay Resort, Fraser Tours, Wikipedia (Rainbow Beach), RMIT Centre for Urban Research, Climate Council, TomTom Traffic Index, ProperEasy (CoreLogic/SQM-Mietdaten), Business Traveller, Only in Australia, Queensland Parks (Lamington), Trust for Trees, Wikipedia (Nothofagus).</footer>
+
+</body>
+</html>

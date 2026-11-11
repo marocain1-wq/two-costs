@@ -28,6 +28,9 @@
 :root[data-theme="dark"]{
   --bg:#11191c; --ink:#e7ecea; --muted:#9aa8ab; --rail:#8a7752; --accent:#5fc0cc; --card:#1a2428; color-scheme:dark;
 }
+.langs{position:absolute;top:12px;right:16px;display:flex;gap:6px;font-family:var(--display);font-size:.85rem;z-index:2}
+.langs a{color:#fff;text-decoration:none;padding:4px 10px;border:1px solid rgba(255,255,255,.6);border-radius:999px;background:rgba(10,20,24,.35)}
+.langs a[aria-current]{background:#fff;color:#16262c}
 *{box-sizing:border-box}
 html,body{margin:0}
 body{background:var(--bg);color:var(--ink);font-family:var(--body);font-size:1.1rem;line-height:1.65}
@@ -77,6 +80,7 @@ footer{max-width:780px;margin:0 auto;padding:24px 20px 40px;font-family:var(--di
 <body>
 
 <header class="hero">
+  <nav class="langs" aria-label="Language"><a href="./" hreflang="en" aria-current="page">English</a><a href="./de/" hreflang="de">Deutsch</a><a href="./fr/" hreflang="fr">Français</a></nav>
   <img src="img/bridge.jpg" alt="The group leaning on the railing of the wooden bridge at Eli Creek, smiling down at the camera">
   <div class="shade"></div>
   <div class="titles">
