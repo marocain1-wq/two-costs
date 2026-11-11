@@ -20,6 +20,7 @@ Stories about living between Morocco and Australia.
 | Starting From Scratch, Again (Australia) | https://marocain1-wq.github.io/two-costs/australia/ |
 | Noch einmal bei null anfangen (Deutsch) | https://marocain1-wq.github.io/two-costs/australia/de/ |
 | Repartir de zéro, encore (Français) | https://marocain1-wq.github.io/two-costs/australia/fr/ |
+| البدء من الصفر، مرة أخرى (العربية) | https://marocain1-wq.github.io/two-costs/australia/ar/ |
 
 ## Drafts (not published yet)
 
