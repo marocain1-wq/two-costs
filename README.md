@@ -13,6 +13,12 @@ Stories about living between Morocco and Australia.
 | Mateship | English | [posts/mateship.en.md](posts/mateship.en.md) | https://claude.ai/artifact/6CVgihGnknrV5RqBsqz8yr |
 | Two Coasts — Street Scenes | English | [posts/two-coasts-street-scenes.en.md](posts/two-coasts-street-scenes.en.md) | https://claude.ai/artifact/Fx92vr2CTXumHq5TUQMF6G |
 
+## Website pages
+
+| Page | Link |
+|------|------|
+| Starting From Scratch, Again (Australia) | https://marocain1-wq.github.io/two-costs/australia/ |
+
 ## Drafts (not published yet)
 
 - **Street Scenes v2**: [drafts/street-scenes-v2.md](drafts/street-scenes-v2.md). New tone (observer, not complaint), section titles between stories, expanded haik passage, and three fact fixes (17,000 km, McCartney line, "five words").

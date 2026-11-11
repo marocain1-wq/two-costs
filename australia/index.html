@@ -1,0 +1,561 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+<meta charset="utf-8">
+<meta name="viewport" content="width=device-width, initial-scale=1">
+<title>Starting From Scratch, Again</title>
+<link rel="preconnect" href="https://fonts.googleapis.com">
+<link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
+<link href="https://fonts.googleapis.com/css2?family=Bricolage+Grotesque:opsz,wght@12..96,500;12..96,700&family=Source+Serif+4:ital,opsz,wght@0,8..60,400;0,8..60,600;1,8..60,400&display=swap" rel="stylesheet">
+<style>
+:root{
+  /* Layout: full-bleed photo opener, then the story runs down a single timeline rail; photos sit on the rail as stops. */
+  --bg:#f2f4f3;
+  --ink:#16262c;
+  --muted:#5b6a6f;
+  --rail:#c9b48a;
+  --accent:#0d6672;
+  --card:#ffffff;
+  --display:"Bricolage Grotesque", "Helvetica Neue", Arial, sans-serif;
+  --body:"Source Serif 4", Georgia, "Times New Roman", serif;
+  color-scheme:light;
+}
+@media (prefers-color-scheme: dark){
+  :root:not([data-theme="light"]){
+    --bg:#11191c; --ink:#e7ecea; --muted:#9aa8ab; --rail:#8a7752; --accent:#5fc0cc; --card:#1a2428; color-scheme:dark;
+  }
+}
+:root[data-theme="dark"]{
+  --bg:#11191c; --ink:#e7ecea; --muted:#9aa8ab; --rail:#8a7752; --accent:#5fc0cc; --card:#1a2428; color-scheme:dark;
+}
+*{box-sizing:border-box}
+html,body{margin:0}
+body{background:var(--bg);color:var(--ink);font-family:var(--body);font-size:1.1rem;line-height:1.65}
+img{max-width:100%;display:block}
+
+.hero{position:relative;color:#fff;background:#16262c}
+.hero img{width:100%;height:clamp(320px,58vw,620px);object-fit:cover;object-position:center 35%}
+.hero .shade{position:absolute;inset:0;background:linear-gradient(to top,rgba(10,20,24,.85) 0%,rgba(10,20,24,.25) 45%,rgba(10,20,24,0) 70%)}
+.hero .titles{position:absolute;left:0;right:0;bottom:0;padding:0 20px 28px;max-width:780px;margin:0 auto}
+.hero h1{font-family:var(--display);font-weight:700;font-size:clamp(2.6rem,9vw,5rem);line-height:1;margin:0 0 .4rem;text-wrap:balance}
+.hero p{margin:0;font-family:var(--display);font-weight:500;font-size:clamp(.95rem,2.6vw,1.15rem);opacity:.92;font-variant-numeric:tabular-nums}
+
+main{max-width:780px;margin:0 auto;padding:36px 20px 24px}
+.timeline{position:relative;display:grid;gap:40px;padding-left:34px}
+.timeline::before{content:"";position:absolute;left:9px;top:6px;bottom:6px;width:2px;background:var(--rail)}
+.stop{position:relative}
+.stop::before{content:"";position:absolute;left:-31px;top:.45rem;width:14px;height:14px;border-radius:50%;background:var(--bg);border:3px solid var(--accent)}
+.stop.photo::before{border-color:var(--rail);background:var(--rail)}
+.when{font-family:var(--display);font-weight:700;font-size:.82rem;letter-spacing:.08em;text-transform:uppercase;color:var(--accent);margin:0 0 .35rem}
+.stop p{margin:0 0 .9rem;max-width:65ch}
+.stop p:last-child{margin-bottom:0}
+blockquote{margin:.2rem 0 1rem;padding:0 0 0 14px;border-left:3px solid var(--rail);font-style:italic}
+
+figure{margin:0;background:var(--card);border-radius:6px;overflow:hidden;box-shadow:0 1px 3px rgba(0,0,0,.12)}
+figcaption{font-family:var(--display);font-size:.85rem;color:var(--muted);padding:8px 12px 10px;line-height:1.4}
+.pair{display:grid;grid-template-columns:1fr 1fr;gap:12px}
+.pair figure img{width:100%;aspect-ratio:3/4;object-fit:cover}
+.sign img{max-height:520px;width:100%;object-fit:cover;object-position:center 30%}
+.clip video{width:100%;display:block;aspect-ratio:848/480;background:#000}
+.tall img{width:100%;max-height:640px;object-fit:cover;object-position:center 40%}
+.wide img{width:100%;aspect-ratio:16/8;object-fit:cover}
+
+.chapter::before{width:20px;height:20px;left:-34px;top:.3rem;background:var(--accent);border-color:var(--accent)}
+.chapter h2{font-size:clamp(1.6rem,5vw,2.1rem);margin:0}
+.chapter .sub{font-family:var(--display);color:var(--muted);margin:.2rem 0 0;font-size:.95rem}
+.facts{background:var(--card);border-left:3px solid var(--accent);padding:12px 16px;border-radius:4px;font-size:1rem}
+.facts p.when{margin-bottom:.5rem}
+h2{font-family:var(--display);font-weight:700;font-size:1.5rem;margin:0 0 .6rem;text-wrap:balance}
+.ending p{font-size:1.15rem}
+.last-line{font-family:var(--display);font-weight:700;font-size:1.25rem;color:var(--accent)}
+.ending .last{font-family:var(--display);font-weight:700;font-size:1.5rem;color:var(--accent)}
+
+footer{max-width:780px;margin:0 auto;padding:24px 20px 40px;font-family:var(--display);font-size:.85rem;color:var(--muted);border-top:1px solid var(--rail)}
+@media (max-width:420px){.pair{grid-template-columns:1fr}.pair figure img{aspect-ratio:auto}}
+</style>
+</head>
+<body>
+
+<header class="hero">
+  <img src="img/bridge.jpg" alt="The group leaning on the railing of the wooden bridge at Eli Creek, smiling down at the camera">
+  <div class="shade"></div>
+  <div class="titles">
+    <h1>Starting From Scratch, Again</h1>
+    <p>Australia · 2003 to 2022 · from Freiburg to the sand highway</p>
+  </div>
+</header>
+
+<main>
+<div class="timeline">
+
+  <section class="stop chapter">
+    <h2>Arriving</h2>
+    <p class="sub">2003 · Freiburg to Australia</p>
+  </section>
+
+  <section class="stop">
+    <p class="when">3 September 2003, around 3pm</p>
+    <p>Freiburg train station. Hugs, waves, a crowd of friends on the platform.</p>
+    <p>Morocco had been the first start from scratch. Germany the second. Australia would be the third. By now, you would think, it should have been easy.</p>
+  </section>
+
+  <section class="stop chapter">
+    <h2>Settling In</h2>
+    <p class="sub">The first years</p>
+  </section>
+
+  <section class="stop">
+    <p class="when">Everything was ready</p>
+    <p>The paperwork was done before the plane landed: citizenship on one side, permanent status on the other. Once you set foot on Australian soil, everything for government services and duties fell into place. School and Medicare came first, and the rest was a matter of timing.</p>
+    <p>Life was ordinary, middle-standard Australian. Nothing was missing. If something was needed, it was bought. Full stop. Everything was taken care of, down to the baby wrap.</p>
+    <p>So this is not a story about money. It’s a story about the head.</p>
+  </section>
+
+  <section class="stop">
+    <p class="when">A house with memories</p>
+    <p>The house that welcomed the family on arrival was a family home, full of childhood memories. Three years later, it was ours. It’s the same house to this day.</p>
+    <p>It came half furnished. The rest arrived from Germany in half a shipping container, arranged through a former employer: the machinery, the household things and, most important of all, the washing machine. With twins, it never had a day off.</p>
+    <p>There was a real office desk, heavy, with a timber frame, and a room to put it in. There were enough rooms for everyone, even one for music. A house with memories and emotions.</p>
+    <p>Not every newcomer starts like that. Later came stories from people who moved into empty houses, with a few chairs for all the furniture. A few years on, they were adding a swimming pool.</p>
+  </section>
+
+  <section class="stop">
+    <p class="when">The language that went missing</p>
+    <p>Years earlier, on a moving bus in Casablanca, a young man was turning French into German in real time. Now the same man stood in an Australian living room, nodding and smiling, usually in the wrong places.</p>
+    <p>At home, the question was always the same, in German: <em>“Was haben sie gesagt?”</em> What did they say?</p>
+    <p>It was the same question, in reverse, that had been asked on a first trip to Morocco years before, in a house full of family firing questions in Arabic. It wasn’t funny then either. But that’s how it went: one supported the other, every time. Finding someone who thinks the way you do, wasn’t that the whole reason for leaving Morocco in the first place?</p>
+    <p>At 45, with kids, no work and no English, one job interview ended with: “You’re too skilled for us.”</p>
+  </section>
+
+  <section class="stop">
+    <p class="when">November, upside down</p>
+    <p>In Germany, November had been the grey month: cold, dark, everything idle. Then it became the month the twins were born. And in Australia, November turned into summer.</p>
+    <p>The twins were 10 months old, and they were the first and last preoccupation of every day. A big house, a quiet street, beautiful weather. Toddlers ran around outside without nappies. Nappies were for bedtime only. In Germany, before every pram walk, you checked the nappy first.</p>
+  </section>
+
+  <section class="stop">
+    <p class="when">Learning English. Or was it Australian English? 😒🤔</p>
+    <p>Australian English is a language where a negative is a compliment. “Not bad” might mean it was excellent. Agree with someone and you tell them they’re “not wrong.” Carl Barron has a whole “Not bad” routine on it.</p>
+    <p>Not cheap. Not far. Not a slow car. And the people who have never left Australia? Not a few of them.</p>
+  </section>
+
+  <section class="stop">
+    <p class="when">An island far, far, far away</p>
+    <p>For anyone arriving from overseas: Australia is different from everything you know, have lived in or grew up with. It’s an island, far, far, far away from the rest of the world. Locals joke about how far it is behind the sun.</p>
+    <p>Forget what you brought in your head about how things should be, and adjust to how they are. There’s no time for comparing or complaining. What you see is what you get. Do your part and get involved. Everything you need to start working, open a business or use your skills is already there.</p>
+  </section>
+
+  <section class="stop facts">
+    <p class="when">Three things you need</p>
+    <p><strong>First, a car.</strong> Public transport isn’t always around the corner, and your next bus stop can be a 30-minute walk away. In 2018, only 12% of Brisbane homes had a stop within 400 m offering a service at least every 30 minutes. In 2024, two-thirds of Brisbane residents still lacked frequent service within 800 m. So the car is the most used public transport in Australia. At peak hour you rarely see more than one person in a car. After the first three months of work, a car is the first thing everyone wants to buy.</p>
+    <p>From where we live, the drive into the city takes some patience. In Brisbane’s morning rush, covering 10 km takes about 24 minutes on average.</p>
+    <p><strong>Second, a house.</strong> Australians live horizontally, not vertically. Outside the CBD (Central Business District), suburbia rarely rises above one storey. Jesus of Suburbia, as Green Day put it. Renting is not cheap. (There it is, the trap: “not cheap” instead of “expensive.” 🙃😆😂) The median weekly rent for a house across Greater Brisbane was about $650 in early 2026.</p>
+    <p><strong>Third, space. A lot of it.</strong> Greater Brisbane is the largest of Australia’s six capital cities by area, at 15,842 km². That’s about ten times the size of the Greater London area, with a fraction of the people.</p>
+  </section>
+
+  <section class="stop">
+    <p class="when">A weekday in suburbia</p>
+    <p>Family homes line a leafy street: lawns, swimming pools, the middle-class houses you know from American movies. Some newcomers call Australia the 51st state of the US. A lot of it feels familiar to visitors from the US and Canada, which is exactly 💯 why those are the guests on today’s tours.</p>
+    <p>At 9:00 the kids are at school and the parents are at work. Until 2:30 you’ll see a few retirees walking the dog or doing their daily exercise, and maybe 30 cars go past all day. There are big parks with playgrounds, sandpits and slides 🛝, and a long, beautiful walk with the buggy along the creek, usually with no one else on it. It’s a paradise for kids.</p>
+    <p>And at some point, you’ll feel alone. That’s part of adjusting too.</p>
+  </section>
+
+  <section class="stop">
+    <p class="when">Duty, not the clock</p>
+    <p>Then you start to notice how much time matters here. Actually, it isn’t the clock. Germany had already taught respect for time. Here it’s a sense of duty: everyone doing their part for the community.</p>
+    <p>Nobody else is responsible for your actions, and the law is the law. Australia left its darker chapters behind to build a fair country, with the same rights and responsibilities for everyone. Everything is there for you to check yourself. You just have to do it yourself, if you can speak ENGLISH.</p>
+  </section>
+
+  <section class="stop">
+    <p class="when">First job</p>
+    <p>The first job was about an hour’s drive away, at the business of a family friend’s brother. It was a family factory of three: the brother, his partner, and the new arrival assembling electrical parts.</p>
+    <p>That meant driving alone on the wrong side of the road, like everyone else here. The road rules came quickly, and so did long conversations at the factory. Getting out of the house had begun.</p>
+  </section>
+
+  <section class="stop">
+    <p class="when">Two weeks of respect 🙏</p>
+    <p>Then came a two-week intensive course for skilled new arrivals: rights and duties in Australia, Australian workplace standards, the laws, and how to act in public situations. Remember, Australia is unique.</p>
+    <p>Why all of this? Because two weeks is enough to learn the basics, and the basics come down to one word: respect.</p>
+  </section>
+
+  <section class="stop facts">
+    <p class="when">The rules nobody writes down</p>
+    <p><strong>Mateship is a survival instinct, not a virtue.</strong> Coming from Morocco, where hospitality is a performance (the tea, the insisting, generosity on display), Australian kindness can feel flat. There’s no fuss and no show, just quiet reliability and not making life harder for the next person. It’s an old reflex from the convict days: we’re all in the same boat against the system. That’s also why rolling your eyes at authority here is almost a bonding ritual, while in Morocco hierarchy is respected, at least in public.</p>
+    <p><strong>Work is a civic duty, not an identity.</strong> “What do you do?” isn’t about status. It’s about whether you contribute. Pay your share and don’t be a “bludger” (someone who lives off the system). Weekends are protected and workaholics get laughed at. The sin isn’t working too little; it’s not contributing at all.</p>
+    <p><strong>English is the price of entry, not the erasure of who you are.</strong> In Morocco, switching languages by context is the most normal thing in the world. Here, English in public and at work is less about identity and more about the same mateship logic: one common language so everyone moves forward together.</p>
+    <p>The thread that ties all three together: don’t become a burden on the group. Be kind, work, speak English.</p>
+  </section>
+
+  <section class="stop">
+    <p class="when">Six weeks in the field</p>
+    <p>Next came six weeks of field training: the same rules again, this time learned by doing. The group was all skilled new migrants: teachers, engineers, doctors. Each was sent into the field their foreign qualifications pointed to, the one they confirmed as their main line of work.</p>
+    <p>The new arrival from Morocco went to a company data centre with about 600 workstations. “Day-to-day work,” they called it, in networking jargon. You had to know computers and computer systems, hardware and software, and how to connect and communicate remotely across the same LAN. And all of it in English, the one language he couldn’t understand. Without English, there was no doing this work.</p>
+    <p>But the most important skill wasn’t on the list. It was talking. Open your mouth. Say something. Explain something.</p>
+  </section>
+
+  <section class="stop">
+    <p class="when">Déjà vu</p>
+    <p>Sound familiar? Casablanca, 1977. A 20-year-old on a tourist bus at dawn, no training, no real vocabulary, turning a French guide’s words into German on the fly, half French, half basic German, making it up as he went. “Meine Frauen und Herren.”</p>
+    <p>Back then, he talked without the words. Now he had the words in his head, just not in English.</p>
+    <p class="last-line">He couldn’t talk. He fell. He stood up again, and started from zero. Again.</p>
+  </section>
+
+  <section class="stop">
+    <p class="when">The two-year rule</p>
+    <p>Someone else who came from overseas once put it this way: a lot of newcomers go through two hard years at the start. Then they leave Australia, come back a few months later, and never leave again.</p>
+    <p>That’s really true. The first two years felt exactly like that. Then came talking, getting out, meeting people, working, and everything changed overnight.</p>
+    <p>Looking back, those two years were necessary: to understand the rules, the mentality, the new society and the language, and to find the confidence to drive your own car without getting lost in the bush.</p>
+  </section>
+
+  <section class="stop">
+    <p class="when">Snakes, spiders and other neighbours</p>
+    <p>One of the most important things this country teaches is a love of nature.</p>
+    <p>Arriving here came with a bitter taste: fear of Australian wildlife. The stories about snakes and spiders were ridiculous, and they came from people who had never set foot in Australia.</p>
+    <p>To those people, the answer now is simple: we love our snakes and spiders. They’re beautiful creatures. You just need to learn about them.</p>
+  </section>
+
+  <section class="stop" id="beech">
+    <p class="when">Doors open</p>
+    <p>Once you open your mind to your surroundings, doors start to open. You learn how many trees there are, and shapes you have never seen before, except maybe in a jungle film.</p>
+    <p>And then one day you are standing in front of trees older than anything you could think of. Here I am, in front of two guests, explaining how the Antarctic beech works: its early Gondwanan life, and where else in the world its family still grows. These trees are about 3,000 years old.</p>
+  </section>
+
+  <section class="stop photo">
+    <figure class="tall">
+      <img src="img/beech.jpg" alt="Moss-covered trunks of an Antarctic beech rising together from one base in misty rainforest">
+      <figcaption>Antarctic beech, Best of All Lookout, Springbrook. All these mossy trunks belong to one tree.</figcaption>
+    </figure>
+  </section>
+
+  <section class="stop facts">
+    <p class="when">Antarctic beech, the short version</p>
+    <p><strong>Where it grows.</strong> <em>Nothofagus moorei</em> lives only in cool temperate rainforest on the high ranges of eastern Australia, between 500 and 1,550 metres, from Barrington Tops in New South Wales north to the Lamington and Springbrook plateaus in Queensland. Almost all of Australia’s Antarctic beech forest lies inside the Gondwana Rainforests of Australia World Heritage Area, and Lamington is its most northerly outpost.</p>
+    <p><strong>How it works.</strong> It grows by coppicing. New shoots rise in a ring around the base of the old trunk and grow into clones of the parent, so a circle of trunks is really one tree. When an old trunk falls, the roots carry on. The trunk in front of you may be young; the tree itself has been here for thousands of years.</p>
+    <p><strong>Where it comes from.</strong> Its family, the southern beeches, has 43 species across southern South America, Australia, New Zealand, New Guinea and New Caledonia, all pieces of the old supercontinent Gondwana. Fossils show they once grew in Antarctica too, before the ice. Botanists say the Antarctic beech is little different from the flowering plants of 100 million years ago.</p>
+    <p><strong>Its weakness.</strong> It needs wet, fire-free country and is slow to recover from fire.</p>
+  </section>
+
+  <section class="stop chapter">
+    <h2>First Tours</h2>
+    <p class="sub">Greater Brisbane</p>
+  </section>
+
+  <section class="stop">
+    <p class="when">A handful of couples</p>
+    <p>My very first tour was at Mary Cairncross Scenic Reserve. A few more followed around Greater Brisbane, no more than five. Mostly German couples, sometimes French.</p>
+    <p>So here I was, a Moroccan on the other side of the world, earning my living in German and French. Just like in Casablanca, all those years ago. Some things follow you wherever you go.</p>
+  </section>
+
+  <section class="stop chapter">
+    <h2>The Swiss Sisters</h2>
+    <p class="sub">Before Covid · my first real learning tour</p>
+  </section>
+
+  <section class="stop">
+    <p class="when">T drives, I talk</p>
+    <p>Then T took me along with two elderly Swiss sisters, to show me what tours like this really involve.</p>
+    <p>The division of labour was simple. T drove. I talked. I kept the sisters informed and updated, kilometre after kilometre.</p>
+    <p>What I didn’t know much about yet was Australia’s culture of time and space. In Europe, a few hours on the road takes you into another country. Here, it takes you to the next town.</p>
+  </section>
+
+  <section class="stop">
+    <p class="when">Brisbane · Noosa · Rainbow Beach</p>
+    <p>North from Brisbane to Noosa and the jetty, then on to Rainbow Beach.</p>
+    <p>The town is named after its sand cliffs, and they earn the name: yellows, browns, reds, whites, layer on layer. Iron-rich minerals paint them, and wind and rain keep repainting them, so they never look the same twice. The Kabi Kabi people tell it better: Yiningie, a rainbow spirit, plunged into the cliffs and left his colours behind.</p>
+  </section>
+
+  <section class="stop">
+    <p class="when">Fraser Island · Kingfisher Bay</p>
+    <p>Along the beach to the barge, and over to the island that was still called Fraser back then. Soft sand tracks. A picnic at Lake McKenzie. The rusty Maheno wreck lying on the beach. Dingo signs. And at night, Kingfisher Bay Resort.</p>
+    <p>The tour was a success. T was the teacher, I was the student, and the student passed.</p>
+  </section>
+
+  <section class="stop chapter">
+    <h2>The Scottish Couple</h2>
+    <p class="sub">About one month later</p>
+  </section>
+
+  <section class="stop">
+    <p class="when">The student takes the wheel</p>
+    <p>A month later, the student was the driver.</p>
+    <p>My passengers: a young Scottish man, a boss at a flight company, and his wife, who had come all the way from Scotland to visit him. A man who knows a thing or two about flying, now trusting me on the ground.</p>
+    <p>And off we went to Fraser Island, in a 4WD. Down the sand highway. Up hard sand dunes.</p>
+  </section>
+
+  <section class="stop photo">
+    <figure class="clip">
+      <video src="img/sand-highway.mp4" poster="img/sand-highway.jpg" autoplay muted loop playsinline controls preload="metadata" aria-label="Drone footage of 4WDs driving along the beach highway between surf and bush"></video>
+      <figcaption>75 Mile Beach from the drone. Ocean on one side, bush on the other, and the highway in between.</figcaption>
+    </figure>
+  </section>
+
+  <section class="stop facts">
+    <p class="when">Rules of the sand highway</p>
+    <p>Yes, the beach is a real highway. 75 Mile Beach, on the island’s eastern side, is gazetted, and Queensland road rules apply: 80 km/h on the beach, 30 km/h on the inland tracks, and an access permit for every vehicle. Let the tyres down to around 18 to 20 psi, or the sand will keep you. Drive two hours either side of low tide, or the ocean will have a word with you.</p>
+    <p>And yes, it is also a runway. Small planes take off and land on it. Give way to the planes.</p>
+  </section>
+
+  <section class="stop">
+    <p class="when">November 2022 · the doors reopen</p>
+    <p>For almost two years, Australia kept its borders shut. When it finally opened them, the whole world seemed to rush in at once, as if this was the last safe place left on a map worn down by Covid fear. Tour companies were overbooked. Every coach, every boat, every guide was spoken for. Everything turned into a bottleneck.</p>
+    <p>Then T called. T, the friend who had been behind the wheel on that first Fraser Island trip with the Swiss sisters. A German group was coming to Queensland and he needed someone who spoke their language.</p>
+    <p>The brief sounded simple. Meet them at Proserpine airport, get them to the hotel, brief them, then take them south: ten days, 1,150 km by coach, all the way down the coast to Brisbane.</p>
+    <p>Simple. On paper.</p>
+  </section>
+
+  <section class="stop photo">
+    <figure class="sign">
+      <img src="img/sign.jpg" alt="Rachid standing beside a young woman holding a sign reading APTC, Taruk: Koala Kia Ora Combi Tour Group">
+      <figcaption>The group sign: “APTC · Taruk: Koala Kia Ora Combi Tour Group”. Photo dated 14 November 2022, 18:17.</figcaption>
+    </figure>
+  </section>
+
+  <section class="stop">
+    <p class="when">Proserpine airport</p>
+    <p>So there I stood at the exit of a small airport in the tropics, holding a sign with a group name on it, waiting for Germany to walk through the door.</p>
+    <p>We met, we boarded the bus, and I opened in German. This time “Meine Damen und Herren” came out right. Some 45 years after “Meine Frauen und Herren” on a tourist bus in Casablanca, the opening line was finally fixed.</p>
+    <p>Then I looked at them properly. Around fourteen to sixteen of us on that bus, counting the coach driver and me, and every guest looking at me as if I were the first solid ground in days. “Sie sprechen Deutsch?” came from every seat at once.</p>
+    <p>No time to introduce myself. And what would I have said anyway? Nobody had told me I would be on my own. Nobody had told them who they would be dealing with either.</p>
+  </section>
+
+  <section class="stop">
+    <p class="when">On their own since Melbourne</p>
+    <p>The story came out in pieces, everyone talking over everyone. Their trip had been sold in Germany as one big Australian tour in four stages: Melbourne, Sydney, Ayers Rock, Queensland. Each stage was supposed to have its own tour manager waiting for them, someone like me, standing in front of the group and explaining what came next.</p>
+    <p>In Melbourne, at the very start, that someone never showed up. They sat in their hotel with no idea who to talk to or what to do. From the first day, the trip had been running on hope.</p>
+    <p>Queensland was my part. And once they found a person who spoke their language, everything that had gone wrong landed on me at once.</p>
+  </section>
+
+  <section class="stop">
+    <p class="when">Airlie Beach · 2 nights</p>
+    <p>First stop, the Mantra Club Croc in Airlie Beach. I called a briefing as soon as possible, outside at the hotel restaurant, before the questions could pile up any higher. Somewhere between the first question and the tenth, it hit me: every decision from here on is mine, and there is nobody to phone.</p>
+    <p>I laid out the next day, reading from the program sheet. Ferry to the Whitsundays. Whitehaven Beach, Hill Inlet and the view, swimming, food on another island, then the boat back to the big ferry and finally the hotel.</p>
+  </section>
+
+  <section class="stop">
+    <p class="when">The snorkelling question</p>
+    <p>One lady’s mouth fell open.</p>
+    <blockquote>“Snorkelling? Are we doing snorkelling?”</blockquote>
+    <p>“Not that I know of,” I said. I checked the sheet again. No snorkelling. The sheet didn’t care.</p>
+    <p>She started crying. She had invested her whole life, she told me, in snorkelling in the Whitsundays. For the next two days she kept crying, and kept telling me.</p>
+  </section>
+
+  <section class="stop photo">
+    <p class="when">Whitsundays · Whitehaven Beach</p>
+    <p>Next morning, snorkelling or not, the ferry was waiting. The Whitsundays are a scatter of 74 islands, and the one everyone comes for is Whitehaven: white sand so fine it squeaks underfoot.</p>
+    <figure class="wide">
+      <img src="img/wh-ferry.jpg" alt="A white Cruise Whitsundays catamaran with a green turtle logo moored at the marina">
+      <figcaption>Cruise Whitsundays, waiting at the marina.</figcaption>
+    </figure>
+  </section>
+
+  <section class="stop photo">
+    <figure class="wide">
+      <img src="img/wh-seaplane.jpg" alt="White silica sand of Whitehaven Beach, a seaplane floating in turquoise water and a yellow tender boat by the shore">
+      <figcaption>Whitehaven Beach. Some arrive by seaplane.</figcaption>
+    </figure>
+  </section>
+
+  <section class="stop photo">
+    <figure class="wide">
+      <img src="img/wh-sign.jpg" alt="The guide leaning on the Whitehaven Beach sign set on a bleached driftwood log">
+      <figcaption>Proof of attendance.</figcaption>
+    </figure>
+  </section>
+
+  <section class="stop photo">
+    <figure class="wide">
+      <img src="img/wh-tenders.jpg" alt="Inflatable tenders carrying people from a large catamaran to the white beach">
+      <figcaption>Tenders shuttling people from the big boats to the sand.</figcaption>
+    </figure>
+  </section>
+
+  <section class="stop photo">
+    <figure class="wide">
+      <img src="img/wh-anchor.jpg" alt="Catamarans, a motor yacht and small boats anchored off a white beach with people standing in the shallows">
+      <figcaption>Everyone wants a piece of this beach.</figcaption>
+    </figure>
+  </section>
+
+  <section class="stop photo">
+    <figure class="wide">
+      <img src="img/wh-queue.jpg" alt="A long line of visitors walking across white sand toward a tender boat at the water's edge">
+      <figcaption>Back to the boat, in single file.</figcaption>
+    </figure>
+  </section>
+
+  <section class="stop photo">
+    <p class="when">Cape Hillsborough</p>
+    <p>Then the long road south began. First stop, Cape Hillsborough, where the bush runs straight down to the beach.</p>
+    <figure class="wide">
+      <img src="img/ch-bus.jpg" alt="The group seated in the coach, several smiling and waving at the camera">
+      <figcaption>Back on the bus. Some smiles, one wave, nobody crying.</figcaption>
+    </figure>
+  </section>
+
+  <section class="stop photo">
+    <figure class="wide">
+      <img src="img/ch-coast.jpg" alt="A hoop pine framing a curved sandy bay, rocky islets and a forested headland over turquoise water">
+      <figcaption>Cape Hillsborough from the lookout.</figcaption>
+    </figure>
+  </section>
+
+  <section class="stop photo">
+    <figure class="wide">
+      <img src="img/ch-lookout.jpg" alt="Two men in hats at a lookout railing above turquoise bays and green islands">
+      <figcaption>At the viewing deck. Islands all the way to the horizon, and one thumb in the frame.</figcaption>
+    </figure>
+  </section>
+
+  <section class="stop photo">
+    <figure class="wide">
+      <img src="img/ch-beach.jpg" alt="A sandy beach patterned with tiny sand balls, dark rock stacks in the surf and an island offshore">
+      <figcaption>The beach below, rock stacks and an island offshore.</figcaption>
+    </figure>
+  </section>
+
+  <section class="stop photo">
+    <figure class="wide">
+      <img src="img/ch-valley.jpg" alt="A wide green valley of farmland between forested ranges under a blue sky">
+      <figcaption>Looking inland.</figcaption>
+    </figure>
+  </section>
+
+  <section class="stop">
+    <p class="when">Rockhampton · 1 night</p>
+    <p>On to Rockhampton for one night. The beef cattle capital of Australia, and you can tell: even the statues in town are bulls.</p>
+  </section>
+
+  <section class="stop">
+    <p class="when">Agnes Water · 1 night</p>
+    <p>Agnes Water gave us the best fish and chips of the whole trip. It also gave us the longest night.</p>
+    <p>Almost midnight, still warm outside. The group sat around a big table at the resort, red wine in the glasses and one subject on the table: the gap between what their travel agent had sold them in Germany and what they were actually getting.</p>
+    <p>Then a knock on the door. Would I come and talk to the travel agent? He was on the phone from Germany, where it was the middle of the afternoon.</p>
+    <p>What I got to hear: he had known about the problems before they happened. He just asked me to do my best to keep them happy.</p>
+    <p>Somehow, that night, the talk and the crying stopped. Maybe it was the wine. Maybe it was simply being heard.</p>
+  </section>
+
+  <section class="stop">
+    <p class="when">Change for $100</p>
+    <p>Then there was the money. Something truly German.</p>
+    <p>One of them walked into a newsagent with a $100 note and asked for change, because they wanted everything in cash, the way you do at home. The shop owner just stared. Change what? Australia had been tapping cards for years, and since Covid nobody wanted to touch money at all. For a German, a country without cash is harder to believe than a kangaroo in the street.</p>
+  </section>
+
+  <section class="stop photo">
+    <p class="when">K’gari · 2 nights</p>
+    <p>Two nights on K’gari, the island I first knew as Fraser. Back on the sand highway, and this time I knew the rules. This time, the bus did the driving.</p>
+    <figure class="wide">
+      <img src="img/buses.jpg" alt="Group members walking across the sand past a blue K'gari Explorer Tours bus and other tour trucks">
+      <figcaption>K’gari Explorer Tours bus on the sand.</figcaption>
+    </figure>
+  </section>
+
+  <section class="stop photo">
+    <figure class="wide">
+      <img src="img/beach.jpg" alt="A long row of four-wheel drives with awnings parked on white sand by the surf">
+      <figcaption>Rush hour on 75 Mile Beach.</figcaption>
+    </figure>
+  </section>
+
+  <section class="stop photo">
+    <figure class="wide">
+      <img src="img/bakery.jpg" alt="White brick bakery with green-lettered signs for Eurong Bake House, Coffee and Cappuccino, Muffins and Donuts">
+      <figcaption>Eurong Bake House. Coffee, muffins and donuts in the middle of a sand island.</figcaption>
+    </figure>
+  </section>
+
+  <section class="stop photo">
+    <div class="pair">
+      <figure>
+        <img src="img/eli-sign.jpg" alt="Eli Creek sign among dune grass with dingo-safe and no-camping symbols">
+        <figcaption>Eli Creek.</figcaption>
+      </figure>
+      <figure>
+        <img src="img/bridge2.jpg" alt="The group lined up on the Eli Creek bridge above people wading with inner tubes">
+        <figcaption>The group on the bridge over Eli Creek.</figcaption>
+      </figure>
+    </div>
+  </section>
+
+  <section class="stop photo">
+    <figure class="tall">
+        <img src="img/tree-rachid.jpg" alt="Rachid with arms and legs spread against the same giant tree trunk">
+        <figcaption>A giant rainforest tree, with a person for scale.</figcaption>
+      </figure>
+  </section>
+
+  <section class="stop photo">
+    <p class="when">Brisbane · Lone Pine Koala Sanctuary</p>
+    <p>Last stop, Brisbane. After ten days and 1,150 km on the road, it was time to meet the locals.</p>
+    <figure class="tall">
+        <img src="img/kangaroos.jpg" alt="A park sign comparing the Eastern Grey Kangaroo, Red Kangaroo, Swamp Wallaby and Red-necked Wallaby">
+        <figcaption>Eastern grey, red, swamp wallaby, red-necked wallaby.</figcaption>
+      </figure>
+  </section>
+
+  <section class="stop ending">
+    <p class="when">Ten days, 1,150 km</p>
+    <p>There were some purely German issues I couldn’t fix. It started in chaos and ended in good company. Some of them are still in touch with me today.</p>
+    <p>For ten days I was back among the people and the language I had left behind when I left Germany. Funny how a coach in Queensland can take you back to Freiburg.</p>
+    <p class="last">Believe me, it went well.</p>
+  </section>
+
+  <section class="stop">
+    <p class="when">Afterwards</p>
+    <p>Two more tours to that part of the world followed. One took another German group to the Whitsundays and Whitehaven Beach, and this time snorkelling was on the programme.</p>
+    <p>Another tour brought the hardest characters yet. After that one, I went to the boss, and stopped. ✋</p>
+    <p>No more Europeans. It’s just a headache. English only: Americans, Canadians. Relaxed, thankful, happy.</p>
+    <p>Never again. Unless it’s one person, or a couple.</p>
+  </section>
+
+  <section class="stop chapter">
+    <h2>Today</h2>
+    <p class="sub">Small tours, one guest or two</p>
+  </section>
+
+  <section class="stop">
+    <p class="when">Something for everyone</p>
+    <p>Beaches, rainforest, the city, the islands, the zoo. Or maybe you’re just here for the food and drink. There’s always something to offer.</p>
+  </section>
+
+  <section class="stop photo">
+    <figure class="clip">
+      <video src="img/straddie-drive.mp4" poster="img/straddie-drive.jpg" autoplay muted loop playsinline controls preload="metadata" style="aspect-ratio:400/230" aria-label="Driving along a wide beach at low tide, seen through the windscreen"></video>
+      <figcaption>Beach driving on North Stradbroke Island, from the driver’s seat.</figcaption>
+    </figure>
+  </section>
+
+  <section class="stop photo">
+    <p class="when">The Whitsundays, the second time</p>
+    <div class="pair">
+      <figure>
+        <img src="img/snorkel-deck.jpg" alt="Guests in full-body stinger suits laughing on the deck of a boat, fins at their feet">
+        <figcaption>This time, snorkelling was on the programme. Stinger suits on.</figcaption>
+      </figure>
+      <figure>
+        <img src="img/snorkel-boat.jpg" alt="Snorkellers in stinger suits sitting on the edge of an inflatable dinghy above turquoise water">
+        <figcaption>Into the water at last.</figcaption>
+      </figure>
+    </div>
+  </section>
+
+  <section class="stop photo">
+    <figure class="wide">
+      <img src="img/coast.jpg" alt="Deep blue water along a forested island shore with a strip of white sand and anchored boats">
+      <figcaption>Whitsunday waters.</figcaption>
+    </figure>
+  </section>
+
+  <section class="stop photo">
+    <figure class="wide">
+      <img src="img/sails.jpg" alt="Two yachts with dark sails crossing the water at dusk in front of island hills">
+      <figcaption>Sails at sunset.</figcaption>
+    </figure>
+</section>
+
+</div>
+</main>
+
+<footer>© 2026 Rachid. All rights reserved.<br>Facts sourced from: SeaLink, Kingfisher Bay Resort, Fraser Tours, Wikipedia (Rainbow Beach), RMIT Centre for Urban Research, Climate Council, TomTom Traffic Index, ProperEasy (CoreLogic/SQM rent data), Business Traveller, Only in Australia, Queensland Parks (Lamington), Trust for Trees, Wikipedia (Nothofagus).</footer>
+
+</body>
+</html>
